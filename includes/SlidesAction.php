@@ -154,8 +154,10 @@ class SlidesAction extends MWAction {
 			return explode( '<h2>', $this->context->getOutput()->getHTML() )[0] . '</div>';
 		}
 		$ending = '</div>';
-		if ( isset( $this->subSection[$section['number']] ) && count($this->subSection[$section['number']])<2) {
-			$ending = "";
+		if ( isset( $this->subSection[$section['number']] ) ) {
+			if ( count( $this->subSection[$section['number']] ) < 2 ) {
+				$ending = "";
+			}
 		}
 		return explode( '<h3>', $this->getSectionHTML( $section ) )[0] . $ending;
 	}

@@ -1,4 +1,7 @@
 {
+	"name": "mediawiki/extensions_slides",
+	"description": "Media wiki extension to turn page into slideshow",
+	"license": "GPL-2.0-or-later",
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "35.0.0",
 		"mediawiki/minus-x": "1.1.1",
