@@ -17,17 +17,34 @@
 					<br/>
 					<?php echo $this->getAuthor() ?>
 				</section>
-				<?php if (!empty($this->getTOCHTML())): ?>
-				<section>
-					<?php echo $this->getTOCHTML() ?>
-				</section>
+				<?php if ($this->isNotEmpty($this->getIntro())): ?>
+					<section>
+						<?php
+							echo $this->getIntro();
+						?>
+					</section>
 				<?php endif; ?>
 				<?php ?>
 				<?php foreach ($this->getSections() as $heading): ?>
 					<section>
+					<?php if ( isset( $this->subSection[$heading['number']] ) ) :?>
+						<?php if ($this->isNotEmpty($this->getIntro($heading))): ?>
+						<section>
+							<?php 
+								echo $this->getIntro($heading);
+							?>
+						</section>
+						<?php endif; ?>
+						<section>
+							<?php 
+								echo $this->getSubSectionHTML( $heading );
+							?>
+						</section>
+					<?php else: ?>
 						<?php 
-							echo $this->getSectionHTML($heading['index']);
+							echo $this->getSectionHTML( $heading );
 						?>
+					<?php endif; ?>
 					</section>
 				<?php endforeach ?>
 			</div>

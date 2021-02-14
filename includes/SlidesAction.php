@@ -35,6 +35,12 @@ use ParserOptions;
 class SlidesAction extends MWAction {
 
 	/**
+	 * Keep subsections of level 1 (h2) in memory
+	 * @var $subSectionsHTML string[]
+	 */
+	protected $subSection = [];
+
+	/**
 	 * Action name is slide
 	 *
 	 * @return string
@@ -112,23 +118,70 @@ class SlidesAction extends MWAction {
 			$parserOutput->getSections(),
 			/**
 			 * Only h2 are slides
+			 * @param $section []
+			 * @return bool
 			 */
 			function ( $section ) {
+				if ( $section["toclevel"] == 2 ) {
+					// store subsection in memory
+					$this->subSection[explode( ".", $section["number"] )[0]][] = $section;
+				}
 				return $section["toclevel"] == 1;
 			}
 		);
 	}
 
 	/**
-	 * Generate html for a given section
+	 * Retrieve the begining of a section
 	 *
-	 * @param int $index section index
+	 * @param string $html content
 	 *
 	 * @return string
 	 */
-	public function getSectionHTML( $index ) {
+	public function isNotEmpty( $html ) {
+		return trim( strip_tags( $html, 'img' ) );
+	}
+
+	/**
+	 * Retrieve the begining of a section
+	 *
+	 * @param Section|null $section index
+	 *
+	 * @return string
+	 */
+	public function getIntro( $section = null ) {
+		if ( !$section ) {
+			return explode( '<h2>', $this->context->getOutput()->getHTML() )[0] . '</div>';
+		}
+		return explode( '<h3>', $this->getSectionHTML( $section ) )[0] . '</div>';
+	}
+
+	/**
+	 * Generate html for a given section
+	 *
+	 * @param Section $section index
+	 *
+	 * @return string
+	 */
+	public function getSubSectionHTML( $section ) {
+		if ( isset( $this->subSection[$section['number']] ) ) {
+			$subSections = $this->subSection[$section['number']];
+			$subSectionsHTML = array_map( [ $this, "getSectionHTML" ], $subSections );
+			return implode( '</section><section>', $subSectionsHTML );
+		}
+		return '';
+	}
+
+	/**
+	 * Generate html for a given section
+	 *
+	 * @param Section $section index
+	 *
+	 * @return string
+	 */
+	public function getSectionHTML( $section ) {
 		$content = $this->getRev()->getContent( \MediaWiki\Revision\SlotRecord::MAIN );
-		$template = $content->getSection( $index )->getText();
+		$template = $content->getSection( $section['index'] )->getText();
 		$text = MediaWikiServices::getInstance()->getParser()->parse(
 			$template,
 			$this->getArticle()->getPage()->getTitle(),

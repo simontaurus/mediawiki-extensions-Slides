@@ -25,8 +25,11 @@
 			window.print();
 		}
 		// rewrite toc links to go to appropriate slide
+
 		/* eslint-disable-next-line  no-jquery/no-global-selector */
-		jQuery( 'li.toclevel-1 li.toclevel-2' ).remove()
+		jQuery( 'li.toclevel-1 li.toclevel-2' ).remove();
+
+		/* eslint-disable-next-line  no-jquery/no-global-selector */
 		jQuery( 'li.toclevel-1 > a' ).each( function ( i, toc ) {
 			var num = i + 2;
 			$( toc ).attr( 'href', '#/' + num );
