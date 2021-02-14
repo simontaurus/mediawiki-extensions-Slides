@@ -1,6 +1,6 @@
 # Mediawiki 'slideshow' extension
 
-![Build Status Image](https://github.com/PascalNoisette/mediawiki-extensions-Slides/workflows/Automated%20code%20checks/badge.svg)
+[![Build Status Image](https://github.com/PascalNoisette/mediawiki-extensions-Slides/workflows/Automated%20code%20checks/badge.svg)](https://github.com/PascalNoisette/mediawiki-extensions-Slides/actions?query=workflow%3A%22Automated+code+checks%22)
 
 Adds a "Slideshow" action to turn any wikipage into a slideshow. Each level 1 sections are turned into a slide.
 
